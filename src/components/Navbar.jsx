@@ -7,7 +7,7 @@ import {
 } from "@headlessui/react";
 import { Link } from "react-router-dom";
 
-import avatar from "../assets/icons/avatar.png";
+// import avatar from "../assets/icons/avatar.png";
 
 export default function Navbar() {
  
