@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
 import { AuthContextt } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const MovieCard = ({id,title,overview,poster_path,vote_average}) => {
   const {currentUser} = useContext(AuthContextt)
-  
+  const navigate = useNavigate()
   return (
-    <div className="movie" id="container">
+    <div onClick={()=>navigate("/details/"+id)} className="movie" id="container">
       <img
         loading="lazy"
         src={`https://image.tmdb.org/t/p/w1280${poster_path}`}
