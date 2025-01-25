@@ -23,20 +23,29 @@ const AuthContext = ({ children }) => {
   }, []);
 
   const createUser = async (email, password, displayName) => {
-    await createUserWithEmailAndPassword(auth, email, password);
-    toastSuccess("Registered Successfully!");
-    navigate("/");
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      toastSuccess("Registered Successfully!");
+      navigate("/");
 
-    //? USERTAKİPTEN SONRA -----kullanıcı profilini güncellemek için kullanılan firebase metodu, login logout da userTakip sayesinde güncelleniyor ama register da isim güncellemesi yok, o da bu şekilde oluyor.alttakini yazmazsam (register ile girdiğimde) navbarda displayName i göremem. alttakini yazmazsam sadece google ile girersem görürüm
-    await updateProfile(auth.currentUser, {
-      displayName: displayName,
-    });
+      //? USERTAKİPTEN SONRA -----kullanıcı profilini güncellemek için kullanılan firebase metodu, login logout da userTakip sayesinde güncelleniyor ama register da isim güncellemesi yok, o da bu şekilde oluyor.alttakini yazmazsam (register ile girdiğimde) navbarda displayName i göremem. alttakini yazmazsam sadece google ile girersem görürüm
+      await updateProfile(auth.currentUser, {
+        displayName: displayName,
+      });
+    } catch (error) {
+      toastError(error.message);
+    }
   };
 
   const signInUser = async (email, password) => {
-    await signInWithEmailAndPassword(auth, email, password);
-    toastSuccess("Logined Successfully");
-    navigate("/");
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      toastSuccess("Logined Successfully");
+      navigate("/");
+    } catch (error) {
+      toastError(error.message)
+    }
+
   };
 
   const signInGoogle = () => {
