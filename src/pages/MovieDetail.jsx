@@ -1,18 +1,18 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-
+import axios from "axios";
 const MovieDetail = () => {
+  const { id } = useParams();
+
   const [detay, setDetay] = useState("");
 
-  const { id } = useParams();
   const API_KEY = process.env.REACT_APP_TMDB_KEY;
 
   useEffect(() => {
     axios
       .get(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`)
       .then((res) => setDetay(res.data));
-  });
+  }, []);
 
   return (
     <div className="md:container px-10 mx-auto py-5">
@@ -34,17 +34,17 @@ const MovieDetail = () => {
             </div>
             <ul className="bg-gray-100 rounded-lg border border-gray-400 text-gray-900">
               <li className="px-6 py-2 border-b border-gray-400 w-full rounded-t-lg">
-                {"Release Date : "+ detay.release_date }
+                {"Release Date : " + detay.release_date}
               </li>
               <li className="px-6 py-2 border-b border-gray-400 w-full">
-                {"Rate : "+ detay.vote_average }
+                {"Rate : " + detay.vote_average}
               </li>
               <li className="px-6 py-2 border-b border-gray-400 w-full">
-                {"Total Vote : "+ detay.vode_count }
+                {"Total Vote : " + detay.vote_count}
               </li>
               <li className="px-6 py-2 border-gray-400 w-full rounded-t-lg">
-                <Link to={-1}
-               
+                <Link
+                  to={-1}
                   className="text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out mb-4"
                 >
                   Go Back
@@ -55,7 +55,7 @@ const MovieDetail = () => {
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default MovieDetail;
