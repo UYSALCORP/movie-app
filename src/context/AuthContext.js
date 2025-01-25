@@ -1,41 +1,41 @@
 import {
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
-  GoogleAuthProvider,
   signOut,
-  onAuthStateChanged,
-  updateProfile
+  updateProfile,
 } from "firebase/auth";
 import React, { createContext, useEffect, useState } from "react";
 import { auth } from "../auth/firebase";
 import { toastError, toastSuccess } from "../helpers/ToastNotify";
 import { useNavigate } from "react-router-dom";
 
-
 export const AuthContextt = createContext();
 
 const AuthContext = ({ children }) => {
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState()
+  const [currentUser, setCurrentUser] = useState();
 
-  useEffect(()=>{
-    userTakip()
-  }, [])
+  useEffect(() => {
+    userTakip();
+  }, []);
 
   const createUser = async (email, password, displayName) => {
     await createUserWithEmailAndPassword(auth, email, password);
-    toastSuccess("Register Completed!");
+    toastSuccess("Registered Successfully!");
     navigate("/");
 
+    //? USERTAKİPTEN SONRA -----kullanıcı profilini güncellemek için kullanılan firebase metodu, login logout da userTakip sayesinde güncelleniyor ama register da isim güncellemesi yok, o da bu şekilde oluyor.alttakini yazmazsam (register ile girdiğimde) navbarda displayName i göremem. alttakini yazmazsam sadece google ile girersem görürüm
     await updateProfile(auth.currentUser, {
-      displayName: displayName
+      displayName: displayName,
     });
   };
 
   const signInUser = async (email, password) => {
     await signInWithEmailAndPassword(auth, email, password);
-    toastSuccess("Logined Succesfully!");
+    toastSuccess("Logined Successfully");
     navigate("/");
   };
 
@@ -44,32 +44,39 @@ const AuthContext = ({ children }) => {
 
     signInWithPopup(auth, provider)
       .then((result) => {
-        toastSuccess("Logined with Google Succesfully!");
+        toastSuccess("Countunied with Google");
         navigate("/");
       })
       .catch((error) => {
-        toastError("Can't keep Google account!")
+        toastError("Can't Keep Google Account!");
       });
   };
 
-  const logOut = () => {
+  const cikis = () => {
     signOut(auth);
-    toastSuccess("Logged Out!")
-  }
+    toastSuccess("Log Outted!");
+  };
 
   const userTakip = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        const {email, displayName, photoURL} = user
-        setCurrentUser({email:email, displayName:displayName, photoURL:photoURL})
+        const { email, displayName, photoURL } = user;
+
+        setCurrentUser({
+          email: email,
+          displayName: displayName,
+          photoURL: photoURL,
+        });
       } else {
-        setCurrentUser(false)
+        setCurrentUser(false);
       }
     });
-  }
+  };
 
   return (
-    <AuthContextt.Provider value={{ createUser, signInUser, signInGoogle, logOut, currentUser }}>
+    <AuthContextt.Provider
+      value={{ createUser, signInUser, signInGoogle, cikis, currentUser }}
+    >
       {children}
     </AuthContextt.Provider>
   );

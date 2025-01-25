@@ -12,7 +12,7 @@ import avatar from "../assets/icons/avatar.png";
 
 export default function Navbar() {
   const {cikis, currentUser} = useContext(AuthContextt)
- 
+  console.log(currentUser)
   return (
     <>
       <Disclosure
